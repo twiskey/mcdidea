@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFC72C">
+<title>麦当劳 · 点餐台</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body data-view="view-menu">
+<div class="phone">
+
+  <!-- ================= S0 点餐 ================= -->
+  <section class="view is-active" id="view-menu">
+    <header class="topbar">
+      <div class="brand">
+        <span class="m">M</span>
+        <div class="brand-txt">
+          <h1>点餐台</h1>
+          <p id="storeLine">正在同步门店…</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs" aria-label="菜单分类"></nav>
+    <main class="menu" id="menuList"></main>
+  </section>
+
+  <!-- ================= S1 取餐号 ================= -->
+  <section class="view" id="view-pickup">
+    <div class="pickup-wrap">
+      <p class="eyebrow">下单成功 · 请留意叫号</p>
+      <div class="pickup-no" id="pickupNo">A000</div>
+      <p class="pickup-tip">凭号取餐 · 预计 3 分钟</p>
+
+      <div class="receipt" id="receipt"></div>
+
+      <div class="ask-card" id="askCard">
+        <p class="ask">想知道你的餐品营养光谱和旋律吗？</p>
+        <div class="ask-btns">
+          <button class="btn primary" id="btnYes">想看</button>
+          <button class="btn ghost" id="btnNo">不用了</button>
+        </div>
+      </div>
+
+      <button class="relink" id="btnRelink" hidden>营养光谱与旋律 ›</button>
+      <button class="link-back" id="btnNewOrder">再点一单</button>
+    </div>
+  </section>
+
+  <!-- ================= S3 光谱 + 旋律 ================= -->
+  <section class="view" id="view-portrait">
+    <header class="sticky-top">
+      <button class="icon-btn" id="btnBack" aria-label="返回取餐号">‹</button>
+      <div class="top-pickup">
+        <span>取餐号</span>
+        <strong id="topPickup">A000</strong>
+      </div>
+      <button class="icon-btn ghost-icon" id="btnRestart" aria-label="重新点餐">⌂</button>
+    </header>
+
+    <main class="portrait-body">
+      <figure class="spectrum-card">
+        <img id="spectrumImg" alt="营养光谱">
+        <figcaption>
+          <span>营养光谱 · 六项营养素达成率</span>
+          <button class="zoom-hint" id="btnZoom">放大查看</button>
+        </figcaption>
+        <button class="share-btn" id="btnShare">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+            <path d="M18 8a3 3 0 1 0-2.8-4H15a3 3 0 0 0 .3 1.3L9.6 8.6a3 3 0 1 0 0 6.8l5.7 3.3A3 3 0 1 0 16.5 17l-5.7-3.3a3 3 0 0 0 0-3.4l5.7-3.3c.4.6 1 1 1.5 1z" fill="currentColor"/>
+          </svg>
+          分享这张营养光谱
+        </button>
+      </figure>
+
+      <section class="melody-card">
+        <div class="seg" id="styleSeg">
+          <button class="seg-btn is-active" data-style="minyue">民乐</button>
+          <button class="seg-btn" data-style="jazz">爵士</button>
+          <button class="seg-btn" data-style="rock">摇滚</button>
+        </div>
+
+        <div class="player">
+          <button class="play" id="playBtn" aria-label="播放">
+            <svg id="iconPlay" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d="M8 5.5v13l11-6.5z" fill="currentColor"/>
+            </svg>
+            <svg id="iconPause" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" hidden>
+              <path d="M7 5h3.2v14H7zM13.8 5H17v14h-3.2z" fill="currentColor"/>
+            </svg>
+          </button>
+          <div class="track" id="track" role="slider" aria-label="播放进度" tabindex="0">
+            <div class="fill" id="fill"></div>
+            <div class="knob" id="knob"></div>
+          </div>
+          <span class="time" id="time">0:00</span>
+        </div>
+
+        <div class="plain" id="plain"></div>
+
+        <p class="sign">
+          这是你专属的在这一刻的旋律
+          <span class="hearts" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.4-4.6-9.2-8.9C1.3 8.2 3.6 4.7 7 4.7c2 0 3.5 1.1 4.4 2.7.9-1.6 2.4-2.7 4.4-2.7 3.4 0 5.7 3.5 4.2 7.4C19.4 16.4 12 21 12 21z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.4-4.6-9.2-8.9C1.3 8.2 3.6 4.7 7 4.7c2 0 3.5 1.1 4.4 2.7.9-1.6 2.4-2.7 4.4-2.7 3.4 0 5.7 3.5 4.2 7.4C19.4 16.4 12 21 12 21z"/></svg>
+          </span>
+        </p>
+
+        <p class="footnote" id="footnote"></p>
+      </section>
+    </main>
+    <audio id="audio" preload="metadata"></audio>
+  </section>
+</div>
+
+<!-- 底部结算（视图外层，保证 fixed 定位稳定） -->
+<div class="cartbar">
+  <div class="cart-info">
+    <span class="cart-count" id="cartCount">0 件</span>
+    <strong id="cartTotal">¥0.00</strong>
+  </div>
+  <button class="btn primary" id="btnOrder" disabled>下单</button>
+</div>
+
+<!-- 生成中 -->
+<div class="overlay" id="loading" hidden>
+  <div class="loader">
+    <div class="vinyl"><span></span></div>
+    <p class="load-title" id="loadTitle">正在准备</p>
+    <p class="load-sub" id="loadSub">解析营养数据…</p>
+  </div>
+</div>
+
+<!-- 放大光谱（整图适配屏幕，保存走分享面板的原图） -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+  <div class="lb-scroll"><img id="lbImg" alt="营养光谱放大"></div>
+  <p class="lb-tip">整图适配屏幕 · 保存原图请用下方「分享」</p>
+</div>
+
+<!-- 分享面板 -->
+<div class="sheet-mask" id="shareMask" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="分享营养光谱">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head">
+      <h3>分享这份营养光谱</h3>
+      <p id="shareSub">A000 · 0 kcal</p>
+    </div>
+
+    <div class="share-grid">
+      <button class="share-item" data-act="wechat">
+        <span class="si-icon wechat">
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <ellipse cx="9.3" cy="9.6" rx="7.2" ry="6" fill="#fff"/>
+            <path d="M6.2 13.6 5 16.4l3.1-1.4z" fill="#fff"/>
+            <circle cx="6.9" cy="9" r="1.05" fill="#07c160"/>
+            <circle cx="11.7" cy="9" r="1.05" fill="#07c160"/>
+            <ellipse cx="16" cy="14.4" rx="5.6" ry="4.6" fill="#fff"/>
+            <path d="M18.4 17.6 19.6 19.8l-2.6-1.1z" fill="#fff"/>
+            <circle cx="14.3" cy="14" r=".9" fill="#07c160"/>
+            <circle cx="17.9" cy="14" r=".9" fill="#07c160"/>
+          </svg>
+        </span>
+        <span>微信好友</span>
+      </button>
+      <button class="share-item" data-act="xhs">
+        <span class="si-icon xhs">红</span>
+        <span>小红书</span>
+      </button>
+      <button class="share-item" data-act="save">
+        <span class="si-icon save">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M12 3v10m0 0 4-4m-4 4L8 9" stroke="#fff" stroke-width="1.9"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="#fff"
+                  stroke-width="1.9" stroke-linecap="round" fill="none"/>
+          </svg>
+        </span>
+        <span>保存图片</span>
+      </button>
+      <button class="share-item" data-act="copy">
+        <span class="si-icon copy">
+          <svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true">
+            <rect x="8" y="8" width="11" height="12" rx="2.5" stroke="#fff" stroke-width="1.8" fill="none"/>
+            <path d="M15.5 5.5H6.5A2 2 0 0 0 4.5 7.5v9" stroke="#fff" stroke-width="1.8"
+                  stroke-linecap="round" fill="none"/>
+          </svg>
+        </span>
+        <span>复制文案</span>
+      </button>
+    </div>
+
+    <p class="sheet-tip">网页无法直接调起微信 / 小红书的发布页，这里会备好图片与文案，打开 App 粘贴即可。</p>
+    <button class="sheet-cancel" id="shareCancel">取消</button>
+  </div>
+</div>
+
+<!-- 轻提示 -->
+<div class="toast" id="toast" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

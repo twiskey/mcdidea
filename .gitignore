@@ -1,0 +1,28 @@
+# ---- 运行时产物（含用户订单数据，禁止入库）----
+order_app/out/*
+!order_app/out/.gitkeep
+order_app/data/orders.json
+order_app/data/mcp_cache.json
+
+# ---- 本机工作记录与个人记忆（私密）----
+.workbuddy/memory/
+.workbuddy/user-*.md
+
+# ---- 本地操作备忘（不上传）----
+GITHUB_UPLOAD.md
+
+# ---- 过程中间产物 ----
+old/
+test/out/
+out/
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ---- 编辑器 / 系统 ----
+.DS_Store
+Thumbs.db
+*.log
